@@ -1,0 +1,77 @@
+            #dynamic-component-demo div p {
+                text-align: center;
+            }
+
+            .tab-button {
+                padding: 6px 10px;
+                border: 1px solid #ccc;
+                background-color: #f0f0f0;
+                cursor: pointer;
+                border-radius: 3px;
+                width: 5em;
+                margin-bottom: -1px;
+                margin-right: -1px;
+            }
+
+            .tab {
+                border: 1px solid #ccc;
+                padding: 10px;
+                width: 30em;
+            }
+
+            .tab-button:hover {
+                background-color: #e0e0e0;
+            }
+
+            .tab-button.active {
+                background-color: #e0e0e0;
+            }
+
+            span {
+                cursor: pointer;
+            }
+
+            ul {
+                list-style-type: none;
+                padding-left: 5px;
+            }
+
+            li {
+                background: url(../img/18111701.png) no-repeat 0 50%;
+                padding-left: 25px;
+                word-break: break-all;
+                word-wrap: break-word
+            }
+
+            .del {
+                text-decoration: line-through;
+            }
+
+            button:hover {
+                border: 1px inset #ccc;
+            }
+
+            button {
+                border: 1px solid #ccc;
+                background-color: #f0f0f0;
+                cursor: pointer;
+                border-radius: 3px;
+            }
+
+            #add {
+                margin-left: 5px;
+            }
+
+            .x {
+                display: inline-block;
+                float: right;
+            }
+
+            .x:hover {
+                color: red;
+            }
+
+            .hide {
+                visibility: hidden;
+                display: none;
+            }

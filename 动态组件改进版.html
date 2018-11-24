@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>动态组件</title>
+        <script src="https://cdn.bootcss.com/vue/2.5.17/vue.js"></script>
+        <link rel="stylesheet" href="./css/index.css">
+    </head>
+
+    <body>
+        <div id="dynamic-component-demo" class="demo">
+            <button v-for="tab in tabs" :key="tab" :class="[ 'tab-button',{ active: currentTab === tab } ]" @click="currentTab = tab">{{
+                tab }}
+            </button>
+
+            <keep-alive>
+                <component :is='currentTabComponent' class="tab" :message='Whatmessage'>
+                </component>
+            </keep-alive>
+        </div>
+
+
+
+        <script>
+            //代办模块
+            var tabWaiting = {
+                data: function () {
+                    var message =  [],
+                        alllength = message.length,
+                        donelength = null;
+                        val = null;
+                    return {
+                        message: message,
+                        alllength: alllength,
+                        donelength: donelength,
+                        val: val,
+                        id: 0,
+                    }
+                },
+
+                template: `
+                    <div>
+                        <p>Do what?  <input @keyup.enter="add" v-model="val"><button @click='add' id="add">Add</button></p>
+                        <ul>
+                            <li v-for='(msg,index) of message'>                            
+                                <span @click="done($event)">{{ msg }}</span> 
+                                <span class='x' @click="remove($event)">x</span>
+                                <span class='hide'>{{index}}</span>
+                            </li>
+                        </ul>
+                                                
+                        <button @click='clear' v-if="this.alllength">
+                            Clear                      
+                        </button>
+                    </div>
+                `,
+
+                methods: {
+                    add: function () {
+                        if (!this.val) {
+                            alert("请输入内容");
+                            return;
+                        }
+                        this.message.push( this.val );
+                        this.val = '';
+                        this.alllength = this.message.length;
+                    },
+
+                    done: function (e) {
+                        e.target.className = 'del';
+                        this.donelength++;
+                        if (this.donelength == this.alllength) {
+                            setTimeout(() => {
+                                alert("你真棒！");
+                            }, 100);
+                        }
+                    },
+
+                    remove: function (event) {
+                        var index = event.target.nextElementSibling.innerHTML;
+                        this.message.splice( index , 1 );
+                        this.alllength = this.message.length;
+                        if (event.target.previousElementSibling.className == 'del') {
+                            this.donelength--;
+                        }
+                    },
+
+                    clear: function () {
+                        this.message.splice(0);
+                        this.alllength = 0;
+                        this.donelength = 0;
+                    },
+                },
+            };
+
+            //已做模块
+            var tabDone = {
+                props: ['message'],
+                template: `
+			<div>
+				待更新
+				<ul>
+					<li v-for='msg in message'>
+						<span> {{ msg }} </span>
+					</li>
+				</ul>
+			</div>
+		`,
+            };
+
+            var vm = new Vue({
+                el: '#dynamic-component-demo',
+                data: {
+                    tabs: ['Waiting', 'Done'],
+                    currentTab: 'Waiting',
+                    messageWaiting: [],
+                    messageDone: [],
+                },
+
+                computed: {
+                    currentTabComponent: {
+                        get: function () {
+                            return 'tab-' + this.currentTab.toLowerCase();
+                        }
+                    },
+                    Whatmessage: {
+                        get: function () {
+                            if (this.currentTab == 'Waiting') {
+                                return this.messageWaiting;
+                            }
+                            return this.messageDone;
+                        }
+                    }
+                },
+
+                components: {
+                    'tab-waiting': tabWaiting,
+                    'tab-done': tabDone,
+                },
+            });
+        </script>
+    </body>
+
+</html>
